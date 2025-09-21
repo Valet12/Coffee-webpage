@@ -1,5 +1,5 @@
 # Coffee-webpage
-This repository contains the source code for the official **Coffee Webpage** of Toro Rosdriguez.
+This repository contains the source code for the official **Coffee Webpage** of Toro Rodriguez.
 
 ## License
 
