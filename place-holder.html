@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Café & Celebraciones — Kaffee & Feiern</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --coffee:#3a2a1a; --cream:#fbf7f2;
+  --accent-orange:#f59e0b; --accent-yellow:#fde047;
+  --accent-green:#16a34a; --accent-pink:#e11d48; --accent-blue:#0ea5e9;
+  --radius:16px; --shadow:0 8px 24px rgba(0,0,0,.08); --space-section:96px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:var(--cream);color:var(--coffee);line-height:1.6;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+.lang-en{display:none} .lang-de{display:inline}
+
+/* ======== ART BACKGROUND (parallax SVG layers) ======== */
+.scene{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
+.layer{position:absolute; width:140vmax; height:140vmax; left:50%; top:50%; transform:translate(-50%,-50%)}
+.layer svg{width:100%; height:100%; opacity:.14; filter:drop-shadow(0 6px 10px rgba(0,0,0,.07))}
+.layer.leaves   {animation: drift 34s linear infinite}
+.layer.flowers  {animation: drift 48s linear infinite reverse}
+.layer.butter   {animation: flutter 16s ease-in-out infinite}
+.layer.acc      {animation: slowspin 110s linear infinite}
+.layer.toucan   {animation: drift 40s linear infinite}
+@keyframes drift   {from{transform:translate(-48%,-52%) rotate(0deg)} to{transform:translate(-52%,-48%) rotate(360deg)}}
+@keyframes slowspin{from{transform:translate(-50%,-50%) rotate(0deg)} to{transform:translate(-50%,-50%) rotate(-360deg)}}
+@keyframes flutter {0%,100%{transform:translate(-50%,-50%) rotate(0)}50%{transform:translate(-52%,-48%) rotate(6deg)}}
+/* Parallax on scroll */
+.parallax{transform:translateZ(0)}
+/* Motion safety */
+@media (prefers-reduced-motion:reduce){
+  .layer{animation:none}
+}
+
+/* ======== HEADER ======== */
+header{position:sticky; top:0; background:rgba(251,247,242,.94); backdrop-filter:blur(10px);
+  padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; z-index:5;
+  box-shadow:0 1px 4px rgba(0,0,0,.05); transform:translateY(-100%); opacity:0; transition:.8s}
+.logo{font-family:"Playfair Display",serif;font-size:1.3rem;font-weight:700;display:flex;align-items:center;gap:.5rem}
+.logo-dot{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--accent-yellow),var(--accent-orange))}
+nav{display:flex;align-items:center;gap:1rem}
+nav a{font-weight:600;position:relative;padding:4px 8px}
+nav a::after{content:"";position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--accent-orange);transition:.3s}
+nav a:hover::after{width:100%}
+.switch-lang button{border:none;background:var(--accent-orange);color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+.switch-lang button:hover{background:#b45309}
+
+/* ======== CONTENT ======== */
+main{position:relative; z-index:1}
+.hero{min-height:85vh; display:flex; align-items:center; justify-content:center; flex-direction:column; text-align:center; padding:0 2rem}
+.hero h1{font-family:"Playfair Display",serif; font-size:3rem; max-width:680px; opacity:0; transform:translateY(40px); transition:.9s}
+.hero p{max-width:640px; margin:1.25rem auto 2rem; font-size:1.125rem; opacity:0; transform:translateY(40px); transition:.9s .2s}
+.hero .tagline{font-family:"Dancing Script",cursive; font-size:1.9rem; color:var(--accent-pink); margin-bottom:1rem; opacity:0; transform:translateY(20px); transition:.8s .4s}
+.cta{background:var(--accent-orange); color:#fff; padding:14px 32px; border-radius:12px; font-weight:600; display:inline-block; transform:scale(0); transition:.6s .6s}
+.cta:hover{background:#b45309; animation:pulse 1s infinite alternate}
+@keyframes pulse{from{transform:scale(1)} to{transform:scale(1.05)}}
+
+section{padding:var(--space-section) 2rem}
+h2{text-align:center; font-family:"Playfair Display",serif; font-size:2rem; margin-bottom:2rem; opacity:0; transform:translateY(30px); transition:.8s}
+.grid{display:grid; gap:1.5rem}
+@media(min-width:768px){.grid{grid-template-columns:repeat(3,1fr)}}
+
+.card{background:#fff; border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);
+  opacity:0; transform:translateY(60px); transition:.8s; display:flex; flex-direction:column}
+.card img{width:100%; height:220px; object-fit:cover; transition:.4s}
+.card:hover img{transform:scale(1.05) rotate(.8deg)}
+.card-body{padding:1.25rem; flex:1; display:flex; flex-direction:column}
+.card-body h3{margin:.5rem 0; font-size:1.25rem; font-weight:600}
+.card-body p{font-size:.95rem; flex:1}
+.price{color:var(--accent-orange); font-weight:700; margin-top:1rem}
+.btn{margin-top:1rem; display:inline-block; padding:10px 18px; background:var(--accent-yellow);
+  border-radius:10px; font-weight:600; text-align:center; transition:.3s}
+.btn:hover{background:var(--accent-orange); color:#fff; transform:scale(1.05)}
+
+.contact{text-align:center}
+.contact p{font-size:1.1rem; opacity:0; transform:translateY(40px); transition:.8s}
+.contact a{color:var(--accent-green); font-weight:600}
+
+footer{background:var(--coffee); color:#fff; text-align:center; padding:2rem; font-size:.9rem;
+  opacity:0; transform:translateY(40px); transition:.8s}
+footer .links{margin-top:1rem; display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; font-size:.85rem}
+footer a{color:var(--accent-yellow)}
+</style>
+</head>
+<body>
+
+<!-- ======== SVG ART SCENE ======== -->
+<div class="scene">
+  <!-- Coffee leaves ring -->
+  <div class="layer leaves parallax" aria-hidden="true">
+    <svg viewBox="0 0 1000 1000">
+      <defs>
+        <g id="leaf">
+          <path d="M0,0 C40,-20 120,-20 180,0 C120,40 40,40 0,0 Z" fill="none" stroke="var(--accent-green)" stroke-width="8" stroke-linecap="round"/>
+          <path d="M0,0 C60,10 120,10 180,0" fill="none" stroke="var(--accent-green)" stroke-width="6" stroke-linecap="round"/>
+        </g>
+      </defs>
+      <!-- radial pattern -->
+      <g transform="translate(500,500)">
+        <!-- 16 leaves around -->
+        <g transform="rotate(0) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(22.5) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(45) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(67.5) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(90) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(112.5) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(135) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(157.5) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(180) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(202.5) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(225) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(247.5) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(270) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(292.5) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(315) translate(260,0)"><use href="#leaf"/></g>
+        <g transform="rotate(337.5) translate(260,0)"><use href="#leaf"/></g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Orchids & flowers ring -->
+  <div class="layer flowers parallax" aria-hidden="true">
+    <svg viewBox="0 0 1000 1000">
+      <defs>
+        <g id="orchid">
+          <circle cx="0" cy="0" r="26" fill="var(--accent-pink)" />
+          <circle cx="-18" cy="0" r="10" fill="var(--accent-yellow)"/>
+          <circle cx="18" cy="0" r="10" fill="var(--accent-yellow)"/>
+          <circle cx="0" cy="-18" r="10" fill="var(--accent-yellow)"/>
+          <circle cx="0" cy="18" r="10" fill="var(--accent-yellow)"/>
+          <circle cx="0" cy="0" r="6" fill="var(--accent-blue)"/>
+        </g>
+      </defs>
+      <g transform="translate(500,500)">
+        <!-- 12 orchids -->
+        <g transform="rotate(0) translate(360,0)"><use href="#orchid"/></g>
+        <g transform="rotate(30) translate(360,0)"><use href="#orchid"/></g>
+        <g transform="rotate(60) translate(360,0)"><use href="#orchid"/></g>
+        <g transform="rotate(90) translate(360,0)"><use href="#orchid"/></g>
+        <g transform="rotate(120) translate(360,0)"><use href="#orchid"/></g>
+        <g transform="rotate(150) translate(360,0)"><use href="#orchid"/></g>
+        <g transform="rotate(180) translate(360,0)"><use href="#orchid"/></g>
+        <g transform="rotate(210) translate(360,0)"><use href="#orchid"/></g>
+        <g transform="rotate(240) translate(360,0)"><use href="#orchid"/></g>
+        <g transform="rotate(270) translate(360,0)"><use href="#orchid"/></g>
+        <g transform="rotate(300) translate(360,0)"><use href="#orchid"/></g>
+        <g transform="rotate(330) translate(360,0)"><use href="#orchid"/></g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Butterflies drift -->
+  <div class="layer butter parallax" aria-hidden="true">
+    <svg viewBox="0 0 1000 1000">
+      <defs>
+        <g id="bf">
+          <path d="M0,0 C-22,-16 -40,-32 -44,-52 C-24,-52 -8,-40 0,-22 C8,-40 24,-52 44,-52 C40,-32 22,-16 0,0 Z"
+            fill="var(--accent-yellow)" stroke="var(--accent-orange)" stroke-width="3"/>
+        </g>
+      </defs>
+      <use href="#bf" x="120" y="120"/>
+      <use href="#bf" x="820" y="240" transform="scale(1.2)"/>
+      <use href="#bf" x="320" y="780" transform="scale(.9)"/>
+      <use href="#bf" x="700" y="640" transform="scale(1.1)"/>
+    </svg>
+  </div>
+
+  <!-- Vallenato accordion silhouette -->
+  <div class="layer acc parallax" aria-hidden="true">
+    <svg viewBox="0 0 1000 1000">
+      <path d="M180,520 h640 a40,40 0 0 0 0,-80 h-640 a40,40 0 0 0 0,80 z
+               M220,440 v160 M260,440 v160 M300,440 v160 M340,440 v160 M380,440 v160
+               M620,440 v160 M660,440 v160 M700,440 v160 M740,440 v160"
+            stroke="var(--accent-blue)" stroke-width="10" fill="none" stroke-linecap="round" opacity=".25"/>
+    </svg>
+  </div>
+
+  <!-- Toucan badge -->
+  <div class="layer toucan parallax" aria-hidden="true">
+    <svg viewBox="0 0 1000 1000">
+      <g transform="translate(820,180) scale(1.2)">
+        <path d="M0,0 c60,0 110,30 140,70 c-30,20 -70,28 -110,20 c-10,40 -40,70 -80,80 c-40,10 -90,-10 -110,-40 c20,-40 60,-70 110,-90 c10,-30 30,-40 50,-40z"
+              fill="var(--accent-orange)" opacity=".3"/>
+        <circle cx="-30" cy="60" r="18" fill="#111" opacity=".25"/>
+      </g>
+    </svg>
+  </div>
+</div>
+
+<header>
+  <div class="logo"><div class="logo-dot"></div><span>Café & Celebraciones</span></div>
+  <nav>
+    <a href="#coffee" class="lang-de">Kaffee</a><a href="#coffee" class="lang-en">Coffee</a>
+    <a href="#arrangements" class="lang-de">Arrangements</a><a href="#arrangements" class="lang-en">Arrangements</a>
+    <a href="#contact" class="lang-de">Kontakt</a><a href="#contact" class="lang-en">Contact</a>
+    <div class="switch-lang"><button id="langToggle">🇩🇪 DE</button></div>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="tagline lang-de">¡Mit Freude in Kolumbien gemacht!</div>
+    <div class="tagline lang-en">¡Made in Colombia with joy!</div>
+
+    <h1 class="lang-de">Spezialitätenkaffee & Unvergessliche Feiern</h1>
+    <h1 class="lang-en">Specialty Coffee & Memorable Celebrations</h1>
+
+    <p class="lang-de">Kolumbianische Bohnen, farbenfrohe Blumen & fröhliche Momente – perfekt für Geburtstage, Abschlüsse und Valentinstag.</p>
+    <p class="lang-en">Colombian beans, vibrant flowers & joyful moments—perfect for Birthdays, Graduations and Valentine’s Day.</p>
+
+    <a href="#arrangements" class="cta lang-de">Zu den Arrangements</a>
+    <a href="#arrangements" class="cta lang-en">Explore Arrangements</a>
+  </section>
+
+  <section id="coffee">
+    <h2 class="lang-de">Unsere Kaffeeauswahl</h2>
+    <h2 class="lang-en">Our Coffee Selection</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1512568400610-62da28bc8a13?w=800" alt="">
+        <div class="card-body">
+          <h3>Espresso</h3>
+          <p class="lang-de">Kräftig & klassisch.</p><p class="lang-en">Strong & classic shot.</p>
+          <div class="price">€2.50</div>
+          <a class="btn lang-de">In den Warenkorb</a><a class="btn lang-en">Add to Cart</a>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1503481766315-7a586b20f66b?w=800" alt="">
+        <div class="card-body">
+          <h3>Cappuccino</h3>
+          <p class="lang-de">Cremiger Milchschaum.</p><p class="lang-en">Velvety milk foam.</p>
+          <div class="price">€3.50</div>
+          <a class="btn lang-de">In den Warenkorb</a><a class="btn lang-en">Add to Cart</a>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800" alt="">
+        <div class="card-body">
+          <h3>Latte</h3>
+          <p class="lang-de">Sanft & cremig.</p><p class="lang-en">Smooth & creamy.</p>
+          <div class="price">€3.80</div>
+          <a class="btn lang-de">In den Warenkorb</a><a class="btn lang-en">Add to Cart</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="arrangements">
+    <h2 class="lang-de">Feier-Arrangements</h2>
+    <h2 class="lang-en">Celebration Arrangements</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1548092372-0d1bd40894a3?w=1200" alt="">
+        <div class="card-body">
+          <h3>Birthday Bliss</h3>
+          <p class="lang-de">Dekor, Kuchen & Kaffeebar mit kolumbianischem Flair.</p>
+          <p class="lang-en">Decor, cake & coffee bar with Colombian flavor.</p>
+          <div class="price">€199</div>
+          <a class="btn lang-de">Anpassen</a><a class="btn lang-en">Customize</a>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?w=1200" alt="">
+        <div class="card-body">
+          <h3>Graduation Glow</h3>
+          <p class="lang-de">Signature Drinks, Fotowand & Fiesta-Stimmung.</p>
+          <p class="lang-en">Signature drinks, photo wall & fiesta vibes.</p>
+          <div class="price">€249</div>
+          <a class="btn lang-de">Anpassen</a><a class="btn lang-en">Customize</a>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200" alt="">
+        <div class="card-body">
+          <h3>San Valentín Soirée</h3>
+          <p class="lang-de">Romantik mit Rosen, Kaffee-Kunst & Freude.</p>
+          <p class="lang-en">Romantic roses, coffee art & joy.</p>
+          <div class="price">€279</div>
+          <a class="btn lang-de">Anpassen</a><a class="btn lang-en">Customize</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <h2 class="lang-de">Kontakt</h2><h2 class="lang-en">Contact</h2>
+    <p class="lang-de">WhatsApp: <a href="https://wa.me/123456789">+123 456 789</a><br>Email: hallo@example.com</p>
+    <p class="lang-en">WhatsApp: <a href="https://wa.me/123456789">+123 456 789</a><br>Email: hello@example.com</p>
+  </section>
+</main>
+
+<footer>
+  <p class="lang-de">© 2025 Café & Celebraciones • Mit kolumbianischem Geschmack ☕🌸</p>
+  <p class="lang-en">© 2025 Café & Celebraciones • With Colombian flavor ☕🌸</p>
+  <div class="links">
+    <a href="#" class="lang-de">Versand & Rückgabe</a><a href="#" class="lang-en">Shipping & Returns</a>
+    <a href="#" class="lang-de">Datenschutz</a><a href="#" class="lang-en">Privacy Policy</a>
+    <a href="#" class="lang-de">AGB</a><a href="#" class="lang-en">Terms of Service</a>
+  </div>
+</footer>
+
+<script>
+// header + hero entrance
+window.addEventListener("load",()=>{
+  const hdr=document.querySelector("header"); hdr.style.opacity=1; hdr.style.transform="translateY(0)";
+  document.querySelectorAll(".hero .tagline,.hero h1,.hero p,.cta").forEach(el=>{
+    el.style.opacity=1; el.style.transform="translateY(0)"; el.style.transformOrigin="50% 50%";
+  });
+});
+
+// scroll reveal
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.style.opacity=1; e.target.style.transform="translateY(0)"; }})
+},{threshold:.12});
+document.querySelectorAll("h2,.card,.contact p,footer").forEach(el=>observer.observe(el));
+
+// parallax on scroll (very light)
+const layers=[...document.querySelectorAll(".layer")];
+window.addEventListener("scroll",()=>{
+  const y=window.scrollY || document.documentElement.scrollTop;
+  layers.forEach((l,i)=>{ l.style.transform=`translate(-50%,-50%) rotate(${(y*(i%2?0.01:-0.008))}deg)`; });
+}, {passive:true});
+
+// language toggle (persist selection)
+const btn=document.getElementById("langToggle");
+let current=localStorage.getItem("lang")||"de";
+const applyLang=(lang)=>{
+  const show = lang==="de" ? ".lang-de" : ".lang-en";
+  const hide = lang==="de" ? ".lang-en" : ".lang-de";
+  document.querySelectorAll(show).forEach(el=>el.style.display="inline");
+  document.querySelectorAll(hide).forEach(el=>el.style.display="none");
+  btn.textContent = lang==="de" ? "🇩🇪 DE" : "🇬🇧 EN";
+  localStorage.setItem("lang", lang);
+};
+applyLang(current);
+btn.addEventListener("click",()=>{ current = (current==="de"?"en":"de"); applyLang(current); });
+</script>
+</body>
+</html>
